@@ -1,0 +1,2 @@
+class OpenGeoCRError(StandardError):
+    pass
