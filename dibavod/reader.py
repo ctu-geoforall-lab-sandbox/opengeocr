@@ -14,8 +14,9 @@ class DibavodReader(OpenGeoCRFileReader):
         self.url_prefix = 'http://www.dibavod.cz/download.php?id_souboru='
         
     def download(self, file_id):
-        # TODO: read list of ids from file
-        ids = []
+        with open(file_id, 'r') as f:
+			ids = [line.strip() for line in f]
+
         for id_file in ids:
             self._download('{prefix}{id}'.format(prefix=self.url_prefix, id=id_file))
             
