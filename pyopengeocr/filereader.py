@@ -1,10 +1,7 @@
-import os
 import requests
 import zipfile
 import StringIO
-import tempfile
 import glob
-import shutil
 
 from osgeo import ogr
 
@@ -13,24 +10,10 @@ from exception import OpenGeoCRError
 
 class OpenGeoCRFileReader(OpenGeoCRReader):
     def __init__(self, schema, input_file, data_dir=None, force_srs=5514, extension='shp'):
-        OpenGeoCRReader.__init__(self, schema, input_file)
+        OpenGeoCRReader.__init__(self, schema, input_file, data_dir=data_dir)
         self.force_srs = force_srs
         self.geometry_name = 'geom'
         self.extension = extension
-        
-        if data_dir:
-            self.data_dir = data_dir
-            self.remove_dir = False
-        else:
-            self.data_dir = tempfile.mkdtemp()
-            self.remove_dir = True
-            print("Data dir: {}".format(self.data_dir))
-
-        os.chdir(self.data_dir)
-
-    def __del__(self):
-        if self.remove_dir:
-            shutil.rmtree(self.data_dir)
         
     def _download(self, url):
         print("Downloading {}...".format(url))
