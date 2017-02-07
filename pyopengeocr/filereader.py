@@ -12,8 +12,8 @@ from base import OpenGeoCRReader
 from exception import OpenGeoCRError
 
 class OpenGeoCRFileReader(OpenGeoCRReader):
-    def __init__(self, schema, data_dir=None, force_srs=5514, extension='shp'):
-        OpenGeoCRReader.__init__(self, schema)
+    def __init__(self, schema, input_file, data_dir=None, force_srs=5514, extension='shp'):
+        OpenGeoCRReader.__init__(self, schema, input_file)
         self.force_srs = force_srs
         self.geometry_name = 'geom'
         self.extension = extension
@@ -47,7 +47,7 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
             self._importpg(shp, ods)
 
     def _importpg(self, ifile, ods):
-        print("Downloading {}...".format(ifile))
+        print("Importing {}...".format(ifile))
         ids = ogr.Open(ifile)
         if ids is None:
             raise OpenGeoCRError("Unable to open '{}'".format(ifile))
@@ -57,9 +57,39 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
             # fix SRS
             spatialRef = layer.GetSpatialRef()
             spatialRef.ImportFromEPSG(self.force_srs)
+
+        options = ['OVERWRITE=YES',
+                   'GEOMETRY_NAME={}'.format(self.geometry_name),
+                   'SCHEMA={}'.format(self.schema)]
+
+        # can fail with Geometry type (MultiPolygon) does not match
+        # column type (Polygon)
+        # ods.CopyLayer(layer, layer.GetName(),
+        # )
+        self._copy_layer(layer, options, ods)
         
-        ods.CopyLayer(layer, layer.GetName(),
-                      ['OVERWRITE=YES',
-                       'GEOMETRY_NAME={}'.format(self.geometry_name),
-                       'SCHEMA={}'.format(self.schema)]
-        )
+    def _copy_layer(self, layer, options, odsn):
+        ### olayer = odsn.CopyLayer(layer, layer.GetName(), options)
+        geom_type = layer.GetGeomType()
+        print geom_type
+        olayer = odsn.CreateLayer(layer.GetName(), layer.GetSpatialRef(),
+                                  geom_type, options)
+
+        # copy attributes
+        feat_defn = layer.GetLayerDefn()
+        for i in range(feat_defn.GetFieldCount()):
+            ifield = feat_defn.GetFieldDefn(i)
+            ofield = ogr.FieldDefn(ifield.GetNameRef(), ifield.GetType())
+            olayer.CreateField(ofield)
+
+        # copy features
+        olayer.StartTransaction()
+        feature = layer.GetNextFeature()
+        while feature:
+            ofeature = ogr.Feature(olayer.GetLayerDefn())
+            olayer.CreateFeature(ofeature)
+            feature = layer.GetNextFeature()
+
+        olayer.CommitTransaction()
+
+        return olayer
