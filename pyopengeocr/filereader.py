@@ -70,10 +70,8 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         
     def _copy_layer(self, layer, options, odsn):
         ### olayer = odsn.CopyLayer(layer, layer.GetName(), options)
-        geom_type = layer.GetGeomType()
-        print geom_type
         olayer = odsn.CreateLayer(layer.GetName(), layer.GetSpatialRef(),
-                                  geom_type, options)
+                                  layer.GetGeomType(), options)
 
         # copy attributes
         feat_defn = layer.GetLayerDefn()

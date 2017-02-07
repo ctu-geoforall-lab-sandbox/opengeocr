@@ -21,4 +21,4 @@ class DibavodReader(OpenGeoCRFileReader):
 if __name__ == "__main__":
     reader = DibavodReader()
     reader.download()
-    reader.importpg('PG:dbname=opengeocr host=geo102.fsv.cvut.cz user=gmuser password=gmuzpd')
+    reader.importpg('PG:dbname=opengeocr host=geo102.fsv.cvut.cz user=XXX password=XXX')
