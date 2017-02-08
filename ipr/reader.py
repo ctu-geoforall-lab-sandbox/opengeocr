@@ -1,5 +1,6 @@
 import os
 import sys
+import argparse
 
 pydir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
              
@@ -25,9 +26,26 @@ class IprReader(OpenGeoCRReader):
 
     def importpg(self):
         self._reader.import_data(crs='S-JTSK', overwrite=True)
-            
-if __name__ == "__main__":
-    reader = IprReader(dbname='opengeocr', host='geo102.fsv.cvut.cz',
-                       user='XXX', passwd='XXX')
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dbname",   type=str, default="opengeocr",
+                        help = "DB name (default: opengeocr)")
+    parser.add_argument("--dbhost",   type=str, default="geo102.fsv.cvut.cz",
+                        help = "DB hostname (default: geo102.fsv.cvut.cz)")
+    parser.add_argument("--dbuser",   type=str, required=True,
+                        help = "DB username")
+    parser.add_argument("--dbpasswd", type=str, required=True,
+                        help = "DB password")
+
+    args = parser.parse_args()
+
+    reader = IprReader(dbname=args.dbname, host=args.dbhost,
+                       user=args.dbuser, passwd=args.dbpasswd)
     reader.download()
     reader.importpg()
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
