@@ -20,9 +20,9 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         if host:
             self._connstr += " host={}".format(host)
         if user:
-            self._connstr += " host={}".format(user)
+            self._connstr += " user={}".format(user)
         if passwd:
-            self._connstr += " host={}".format(passwd)
+            self._connstr += " password={}".format(passwd)
 
     def _download(self, url):
         print("Downloading {}...".format(url))
