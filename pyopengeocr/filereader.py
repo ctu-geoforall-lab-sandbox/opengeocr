@@ -76,7 +76,7 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         olayer.StartTransaction()
         feature = layer.GetNextFeature()
         while feature:
-            ofeature = ogr.Feature(olayer.GetLayerDefn())
+            ofeature = feature.Clone()
             olayer.CreateFeature(ofeature)
             feature = layer.GetNextFeature()
 
