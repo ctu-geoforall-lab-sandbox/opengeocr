@@ -62,8 +62,21 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         
     def _copy_layer(self, layer, options, odsn):
         ### olayer = odsn.CopyLayer(layer, layer.GetName(), options)
+        geom_type = layer.GetGeomType()
+        # force multifeatures
+        force_geom = None
+        if geom_type == ogr.wkbPoint:
+            geom_type = ogr.wkbMultiPoint
+            force_geom = ogr.ForceToMultiPoint
+        elif geom_type == ogr.wkbLineString:
+            geom_type = ogr.wkbMultiLineString
+            force_geom = ogr.ForceToMultiLineString
+        elif geom_type == ogr.wkbPolygon:
+            geom_type = ogr.wkbMultiPolygon
+            force_geom = ogr.ForceToMultiPolygon
+
         olayer = odsn.CreateLayer(layer.GetName(), layer.GetSpatialRef(),
-                                  layer.GetGeomType(), options)
+                                  geom_type, options)
 
         # copy attributes
         feat_defn = layer.GetLayerDefn()
@@ -77,6 +90,9 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         feature = layer.GetNextFeature()
         while feature:
             ofeature = feature.Clone()
+            if force_geom:
+                geom = force_geom(feature.GetGeometryRef())
+                ofeature.SetGeometry(geom)
             olayer.CreateFeature(ofeature)
             feature = layer.GetNextFeature()
 
