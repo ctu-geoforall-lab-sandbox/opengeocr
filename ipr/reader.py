@@ -3,14 +3,14 @@ import sys
 import argparse
 
 pydir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-             
+
 sys.path.insert(0, os.path.join(pydir, '..'))
 
 from pyopengeocr.base import OpenGeoCRReader
-from iprdownloader.IprPg import IprDownloaderPg
+from IprPg import IprDownloaderPg
 
 class IprReader(OpenGeoCRReader):
-        
+
     def __init__(self, dbname, host, user, passwd,
                  schema='ipr',
                  input_file=os.path.join(pydir, 'input.txt')):
@@ -20,7 +20,7 @@ class IprReader(OpenGeoCRReader):
                                        dbschema=schema)
         for item in self.input_list:
             self._reader.filter(item, crs='S-JTSK', file_format='shp')
-        
+
     def download(self):
         self._reader.download(outdir=self.data_dir, only_import=False)
 
@@ -33,9 +33,9 @@ def main():
                         help = "DB name (default: opengeocr)")
     parser.add_argument("--dbhost",   type=str, default="geo102.fsv.cvut.cz",
                         help = "DB hostname (default: geo102.fsv.cvut.cz)")
-    parser.add_argument("--dbuser",   type=str, required=True,
+    parser.add_argument("--dbuser",   type=str, default="gmuser",
                         help = "DB username")
-    parser.add_argument("--dbpasswd", type=str, required=True,
+    parser.add_argument("--dbpasswd", type=str, default="gmuzpd",
                         help = "DB password")
 
     args = parser.parse_args()
