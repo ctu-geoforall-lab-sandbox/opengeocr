@@ -1,0 +1,42 @@
+################################################################################
+[metadata]
+identifier=CZ-140220172-uzpd-project
+language=cze
+parentidentifier= 0
+hierarchylevel=dataset
+datestamp=2017-02-14
+
+################################################################################
+[identification]
+charset=utf8
+title=databáze RUIAN Praha
+abstract=Upravená databáze volně dostupných geografických dat RUIAN pro oblast Prahy. Obsahuje tabulky : Katastrální území, ZSJ, Obce, Části obcí, MOMC, MOP, Správní obvody, Parcely, Stavební objekty, Ulice, Adresní místa. Popisné informace o jednotlivých tabulkách lze dohledat v přiložené dokumentaci.
+keywords=cvut, uzpd, ruian, geodata, Praha
+language=cze
+creation_date=2017-02-14
+revision_date=2017-02-14
+uselimitation=Pro studentské účely.
+accessconstraints=otherRestrictions
+otherconstraints=bez omezení
+fees= 0 CZK
+
+################################################################################
+[spatial]
+crs=5514
+bbox=-756690.19,-1058923.00,-722399.44,-1033999.88
+datatype=vector
+
+################################################################################
+[distribution]
+format=Postgre_DB
+url=geo102.fsv.cvut.cz
+
+################################################################################
+[contact:custodian]
+organization=ČÚZK
+identifier=00025712
+
+################################################################################
+[contact:user]
+individualname=Jan Zachariáš
+email=jan.zacharias@seznam.cz
