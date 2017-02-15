@@ -10,7 +10,7 @@ ALTER TABLE staty DROP COLUMN idtransakce;
 ALTER TABLE staty DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE staty RENAME COLUMN nutslau TO nuts;
 ALTER TABLE staty RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE staty RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE staty DROP COLUMN originalnihranice;
 ALTER TABLE staty RENAME COLUMN generalizovanehranice TO geom_gen;
 ALTER TABLE staty RENAME TO stat;
 
@@ -25,7 +25,7 @@ ALTER TABLE regionysoudrznosti DROP COLUMN idtransakce;
 ALTER TABLE regionysoudrznosti DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE regionysoudrznosti RENAME COLUMN nutslau TO nuts;
 ALTER TABLE regionysoudrznosti RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE regionysoudrznosti RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE regionysoudrznosti DROP COLUMN originalnihranice;
 ALTER TABLE regionysoudrznosti RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE VUSC ###
@@ -39,7 +39,7 @@ ALTER TABLE vusc DROP COLUMN idtransakce;
 ALTER TABLE vusc DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE vusc RENAME COLUMN nutslau TO nuts;
 ALTER TABLE vusc RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE vusc RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE vusc DROP COLUMN originalnihranice;
 ALTER TABLE vusc RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE Kraje ###
@@ -53,7 +53,7 @@ ALTER TABLE kraje DROP COLUMN idtransakce;
 ALTER TABLE kraje DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE kraje RENAME COLUMN nutslau TO nuts;
 ALTER TABLE kraje RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE kraje RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE kraje DROP COLUMN originalnihranice;
 ALTER TABLE kraje RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE Okresy ###
@@ -68,7 +68,7 @@ ALTER TABLE okresy DROP COLUMN idtransakce;
 ALTER TABLE okresy DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE okresy RENAME COLUMN nutslau TO nuts;
 ALTER TABLE okresy RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE okresy RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE okresy DROP COLUMN originalnihranice;
 ALTER TABLE okresy RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE ORP ###
@@ -82,7 +82,7 @@ ALTER TABLE orp RENAME COLUMN platido TO plati_do;
 ALTER TABLE orp DROP COLUMN idtransakce;
 ALTER TABLE orp DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE orp RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE orp RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE orp RENAME DROP COLUMN originalnihranice;
 ALTER TABLE orp RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE MOP ###
@@ -161,7 +161,7 @@ ALTER TABLE katastralniuzemi DROP COLUMN mluvnickecharakteristikypad4;
 ALTER TABLE katastralniuzemi DROP COLUMN mluvnickecharakteristikypad6;
 ALTER TABLE katastralniuzemi DROP COLUMN mluvnickecharakteristikypad7;
 ALTER TABLE katastralniuzemi RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE katastralniuzemi RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE katastralniuzemi DROP COLUMN originalnihranice;
 ALTER TABLE katastralniuzemi RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE Obce ###
@@ -182,7 +182,7 @@ ALTER TABLE obce DROP COLUMN mluvnickecharakteristikypad6;
 ALTER TABLE obce DROP COLUMN mluvnickecharakteristikypad7;
 ALTER TABLE obce RENAME COLUMN nutslau TO nuts;
 ALTER TABLE obce RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE obce RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE obce DROP COLUMN originalnihranice;
 ALTER TABLE obce RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE POU ###
@@ -196,7 +196,7 @@ ALTER TABLE pou RENAME COLUMN platido TO plati_do;
 ALTER TABLE pou DROP COLUMN idtransakce;
 ALTER TABLE pou DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE pou RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE pou RENAME COLUMN originalnihranice TO geom;
+ALTER TABLE pou DROP COLUMN originalnihranice;
 ALTER TABLE pou RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE ZSJ ###
