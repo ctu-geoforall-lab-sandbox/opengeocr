@@ -50,7 +50,7 @@ ALTER TABLE katastralniuzemi DROP COLUMN mluvnickecharakteristikypad6;
 ALTER TABLE katastralniuzemi DROP COLUMN mluvnickecharakteristikypad7;
 ALTER TABLE katastralniuzemi RENAME COLUMN definicnibod TO geom_def_bod;
 ALTER TABLE katastralniuzemi RENAME COLUMN originalnihranice TO geom;
-ALTER TABLE katastralniuzemi RENAME COLUMN generalizovanehranice TO geom_gen;
+ALTER TABLE katastralniuzemi DROP COLUMN generalizovanehranice;
 
 -- ### TABLE MOMC ###
 ALTER TABLE momc RENAME COLUMN ogc_fid TO id;
@@ -97,7 +97,7 @@ ALTER TABLE obce DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE obce RENAME COLUMN nutslau TO nuts;
 ALTER TABLE obce RENAME COLUMN definicnibod TO geom_def_bod;
 ALTER TABLE obce RENAME COLUMN originalnihranice TO geom;
-ALTER TABLE obce RENAME COLUMN generalizovanehranice TO geom_gen;
+ALTER TABLE obce DROP COLUMN generalizovanehranice;
 
 -- ### TABLE Spravni obvody ###
 ALTER TABLE spravniobvody RENAME COLUMN ogc_fid TO id;
