@@ -82,7 +82,7 @@ ALTER TABLE orp RENAME COLUMN platido TO plati_do;
 ALTER TABLE orp DROP COLUMN idtransakce;
 ALTER TABLE orp DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE orp RENAME COLUMN definicnibod TO geom_def_bod;
-ALTER TABLE orp RENAME DROP COLUMN originalnihranice;
+ALTER TABLE orp DROP COLUMN originalnihranice;
 ALTER TABLE orp RENAME COLUMN generalizovanehranice TO geom_gen;
 
 -- ### TABLE MOP ###
