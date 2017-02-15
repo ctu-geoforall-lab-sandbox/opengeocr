@@ -123,7 +123,9 @@ ALTER TABLE adresnimista RENAME COLUMN platido TO plati_do;
 ALTER TABLE adresnimista DROP COLUMN idtransakce;
 ALTER TABLE adresnimista DROP COLUMN globalniidnavrhuzmeny;
 ALTER TABLE adresnimista RENAME COLUMN isknbudovaid TO id_budova_iskn;
-ALTER TABLE adresnimista RENAME COLUMN definicnibod TO geom;
+ALTER TABLE adresnimista RENAME COLUMN adresnibod TO geom;
+ALTER TABLE adresnimista RENAME COLUMN hacici TO geom_hasici;
+ALTER TABLE adresnimista RENAME COLUMN zachranka TO geom_zachranka;
 
 -- ### TABLE Parcely ###
 ALTER TABLE parcely RENAME COLUMN id TO kod;
