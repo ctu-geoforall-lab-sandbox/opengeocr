@@ -1,0 +1,1081 @@
+MAP
+
+  NAME           "uzpd"
+  STATUS         ON
+  IMAGETYPE      PNG
+  EXTENT         -957533 -1234597 -378779 -927935
+  SIZE           1024 512
+  IMAGECOLOR     255 255 255
+  UNITS          meters
+  PROJECTION
+    "init=epsg:5514"
+  END
+
+  CONFIG "MS_NONSQUARE" "YES" 
+  CONFIG "CGI_CONTEXT_URL" "1"
+  #CONFIG "MS_ERRORFILE" "stderr"
+  #CONFIG  "MS_ERRORFILE" "/var/www/ms_error.log"
+  #DEBUG 5
+  
+### ------------------ web interface definition ---------------------
+  WEB
+    #IMAGEPATH "/var/tmp/ms_tmp/"
+    #IMAGEURL "/tmp/"
+    METADATA 
+      WMS_ENABLE_REQUEST "*" 
+	"wms_title"	"WMS služba"
+	"wms_abstract"	"WMS služba serveru geo102.fsv.cvut.cz poskytující vrstvy ze schematu ruian, ruain_praha a dibavod"
+	"wms_keywordlist" "WMS, ruain, praha, dibavod, uzpd"
+	"wms_contactelectronicmailaddress" "streda.lukas@seznam.cz"
+	"wms_contactperson"                "Lukáš Středa"
+	"wms_crs"	"epsg:5514"
+	"wms_encoding"  "UTF-8"
+#---wfs---
+	"wfs_title"	"WFS služba"
+	"wfs_abstract"	"WFS služba serveru geo102.fsv.cvut.cz poskytující vrstvy ze schematu ruian, ruain_praha a dibavod"
+	"wfs_keywordlist" "WFS, ruain, praha, dibavod, uzpd"
+	"wfs_contactelectronicmailaddress" "streda.lukas@seznam.cz"
+	"wfs_contactperson"                "Lukáš Středa"
+	"wfs_crs"	"epsg:5514"
+	"wfs_encoding"  "UTF-8"
+    END
+  END
+
+### --------------------- symbols definition ------------------------
+  SYMBOL
+    NAME "circle"
+    TYPE ellipse
+    POINTS
+      1 1
+    END
+    FILLED true
+    ANCHORPOINT 0.5 0.5
+  END
+
+  SYMBOL
+    NAME "square"
+    TYPE vector
+    POINTS
+      0 0
+      0 1
+      1 1
+      1 0
+      0 0
+    END
+    FILLED true
+    ANCHORPOINT 0.5 0.5
+  END
+
+### ---------------------- layers definition ------------------------
+### -----------------------------------------------------------------
+### ---------------------------- RUIAN ------------------------------
+
+  LAYER
+    NAME	          	'castiobci'
+    METADATA
+      "wms_title"           	"Části obcí ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"		"http://localhost/castiobci.sld"
+
+      "wfs_title"         	"Čýsti obcí ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.castiobci"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "casti obci"
+      STYLE
+	SYMBOL 	    "circle"	
+	COLOR        150 50 50
+	SIZE	     5
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'katastralniuzemi'
+    METADATA
+      "wms_title"           	"Katastrální území ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/katastralniuzemi.sld"
+
+      "wfs_title"         	"Katastrální území ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.katastralniuzemi"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "katastralniuzemi"
+      STYLE
+        COLOR        255 188 0
+        OUTLINECOLOR 64  64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'kraje'
+    METADATA
+      "wms_title"           	"Kraje ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"            	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/kraje.sld"
+
+      "wfs_title"         	"Kraje ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.kraje"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "kraje"
+      STYLE
+        COLOR        0  204 0
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'momc'
+    METADATA
+      "wms_title"          	"MOMC ČR"
+      "wms_abstract"	   	"Území městského obvodu a městské části územně členěného statutárního města"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/momc.sld"
+
+      "wfs_title"         	"MOMC ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.momc"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "momc"
+      STYLE
+	SYMBOL 	    "circle"	
+	COLOR        153 153 0
+	SIZE	     5
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'mop'
+    METADATA
+      "wms_title"           	"MOP ČR"
+      "wms_abstract"	    	"Území městského obvodu v hlavním městě Praze"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/mop.sld"
+
+      "wfs_title"         	"MOP ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.mop"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "mop"
+      STYLE
+	SYMBOL 	    "circle"	
+	COLOR        153 0 0
+	SIZE	     5
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'obce'
+    METADATA
+      "wms_title"           	"Obce ČR"
+      "wms_abstract"	    	"Území obce a Území vojenského újezdu"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/obce.sld"
+
+      "wfs_title"         	"Obce ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.obce"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "obce"
+      STYLE
+        COLOR        204 229 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'okresy'
+    METADATA
+      "wms_title"           	"Okresy ČR"
+      "wms_abstract"	    	"Území okresu"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/okresy.sld"
+
+      "wfs_title"         	"Okresy ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.okresy"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "okresy"
+      STYLE
+        COLOR        178 102 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'orp'
+    METADATA
+      "wms_title"           	"ORP ČR"
+      "wms_abstract"	    	"Správní obvod obce s rozšířenou působností"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/orp.sld"
+
+      "wfs_title"         	"ORP ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.orp"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "orp"
+      STYLE
+        COLOR        255 102 102
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'pou'
+    METADATA
+      "wms_title"           	"POU ČR"
+      "wms_abstract"	    	"Správní obvod obce s pověřeným obecním úřadem"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/pou.sld"
+
+      "wfs_title"         	"POU ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.pou"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "pou"
+      STYLE
+        COLOR        255 255 51
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'regionysoudrznosti'
+    METADATA
+      "wms_title"           	"Regiony soudržnosti ČR"
+      "wms_abstract"	    	"Území regionu soudržnosti"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/regionysoudrznosti.sld"
+
+      "wfs_title"         	"Regiony soudržnosti ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.regionysoudrznosti"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "regionysoudrznosti"
+      STYLE
+        COLOR        102 255 178
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'spravniobvody'
+    METADATA
+      "wms_title"           	"Správní obvody ČR"
+      "wms_abstract"	    	"Správní obvod v hlavním městě Praze"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/spravniobvody.sld"
+
+      "wfs_title"         	"Správní obvody ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.spravniobvody"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "spravniobvody"
+      STYLE
+	SYMBOL 	    "circle"	
+	COLOR        155 0 127
+	SIZE	     5
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'staty'
+    METADATA
+      "wms_title"           	"Státy ČR"
+      "wms_abstract"	    	"Území státu"
+      #"wms_onlineresource" 	"/opt/mapserver/test1.map&"
+      #"wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/staty.sld"
+
+      "wfs_title"         	"Staty ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.staty"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "staty"
+      STYLE
+        COLOR        229 255 204
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME           		'vusc'
+    METADATA
+      "wms_title"           	"VUSC ČR"
+      "wms_abstract"	    	"Území vyššího územně samosprávného celku"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/vusc.sld"
+
+      "wfs_title"         	"VUSC ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.vusc"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "vusc"
+      STYLE
+        COLOR        102 51 0
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'zsj'
+    METADATA
+      "wms_title"           	"Základní sídelní jednotky ČR"
+      "wms_abstract"	    	"Popisuje základní sídelní jednotky"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/zsj.sld"
+
+      "wfs_title"         	"Základní sídelní jednotky ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian.zsj"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "zakladni_sidelni_jednotka"
+      STYLE
+	SYMBOL 	    "square"	
+	COLOR        0 255 0
+	SIZE	     5
+      END
+    END
+  END
+
+### -----------------------------------------------------------------
+### -------------------------- RUIAN_PRAHA --------------------------
+
+  LAYER
+    NAME          		'adresnimista_prg'
+    METADATA
+      "wms_title"           	"Adresní místa Praha"
+      #"wms_onlineresource" 	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/adresnimista_prg.sld"
+
+      "wfs_title"         	"Adresní místa Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.adresnimista"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "adresnimista_prg"
+      STYLE
+	SYMBOL 	    "circle"	
+	COLOR        150 50 50
+	SIZE	     5
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'castiobci_prg'
+    METADATA
+      "wms_title"           	"Části obcí Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/castiobci_prg.sld"
+
+      "wfs_title"         	"Části obcí Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.castiobci"
+    STATUS          OFF
+    TYPE            POINT
+    CLASS
+      NAME          "castiobci_prg"
+      STYLE
+	SYMBOL 	    "square"	
+	COLOR        255 188 0
+	SIZE	     5
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'katastralniuzemi_prg'
+    METADATA	
+      "wms_title"           	"Katastrální území Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/katastralniuzemi_prg.sld"
+
+      "wfs_title"         	"Katastrální území Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.katastralniuzemi"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "katastralniuzemi_prg"
+      STYLE
+        COLOR        0 204 0
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'momc_prg'
+    METADATA
+      "wms_title"           	"MOMC Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/momc_prg.sld"
+
+      "wfs_title"         	"MOMC Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.momc"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "momc_prg"
+      STYLE
+        COLOR        240 229 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'mop_prg'
+    METADATA
+      "wms_title"           	"MOP Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/mop_prg.sld"
+
+      "wfs_title"         	"MOP Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.mop"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "mop_prg"
+      STYLE
+        COLOR        178 102 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'obce_prg'
+    METADATA
+      "wms_title"           	"Obce Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/obce_prg.sld"
+
+      "wfs_title"         	"Obce Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.obce"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "obce_prg"
+      STYLE
+        COLOR        255 102 102
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'parcely_prg'
+    METADATA	
+      "wms_title"           	"Parcely Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/parcely1_prg.sld"
+      #"wms_sld_url"        	"http://localhost/parcely2_prg.sld"
+
+      "wfs_title"         	"Parcely Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.parcely"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "parcely_prg"
+      STYLE
+        COLOR        255 255 51
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'spravniobvody_prg'
+    METADATA
+      "wms_title"           	"Správní obvody Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/spravniobvody_prg.sld"
+
+      "wfs_title"         	"Správní obvody Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.spravniobvody"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "spravniobvody_prg"
+      STYLE
+        COLOR        102 255 178
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'stavebniobjekty_prg'
+    METADATA
+      "wms_title"           	"Stavební objekty Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/stavebniobjekty_prg.sld"
+
+      "wfs_title"         	"Stavební objekty Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.stavebniobjekty"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "stavebniobjekty_prg"
+      STYLE
+        COLOR        153 0 127
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'ulice_prg'
+    METADATA
+      "wms_title"           	"Ulice Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/ulice_prg.sld"
+
+      "wfs_title"         	"Ulice Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.ulice"
+    STATUS          OFF
+    TYPE            LINE
+    CLASS
+      NAME          "ulice_prg"
+      STYLE
+        COLOR        102 51 0
+	WIDTH 3
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'zsj_prg'
+    METADATA
+      "wms_title"           	"Základní sídelní jednotky Praha"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/zsj_prg.sld"
+
+      "wfs_title"         	"Základní sídelní jednotky Praha"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gml_id"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM ruian_praha.zsj"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "zsj_prg"
+      STYLE
+        COLOR        229 255 204
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+### -----------------------------------------------------------------
+### ---------------------------- DIBAVOD ----------------------------
+
+  LAYER
+    NAME          		'vodni_toky'
+    METADATA
+      "wms_title"           	"Vodní toky DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/vodni_toky.sld"
+
+      "wfs_title"         	"Vodní toky DOBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.vodni_toky"
+    STATUS          OFF
+    TYPE            LINE
+    CLASS
+      NAME          "vodni_toky"
+      STYLE
+        COLOR        0 0 255
+	WIDTH 3
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'povodi_i'
+    METADATA
+      "wms_title"           	"Povodí prvního řádu DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/povodi_i.sld"
+
+      "wfs_title"         	"Povodí prvního řádu DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.povodi_i"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "povodi_i"
+      STYLE
+        COLOR        153 153 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'povodi_ii'
+    METADATA
+      "wms_title"           	"Povodí druheho řádu DIBAVOD ČR"
+      #"wms_onlineresource" 	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/povodi_ii.sld"
+
+      "wfs_title"         	"Povodí druhého řádu DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.povodi_ii"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "povodi_ii"
+      STYLE
+        COLOR        102 102 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'povodi_iii'
+    METADATA
+      "wms_title"           	"Povodí třetího řádu DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/povodi_iii.sld"
+
+      "wfs_title"         	"Povodí třetího řádu DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.povodi_iii"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "povodi_iii"
+      STYLE
+        COLOR        51 51 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'povodi_iv'
+    METADATA
+      "wms_title"           	"Povodí čtvrtého řádu DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/povodi_iv.sld"
+
+      "wfs_title"         	"Povodí čtvrtého řádu DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.povodi_iv"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "povodi_iv"
+      STYLE
+        COLOR        0 0 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'vodni_nadrze'
+    METADATA
+      "wms_title"           	"Plochy vodních nádrží DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/vodni_nadrze.sld"
+
+      "wfs_title"         	"Plochy vodních nádrží DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.vodni_nadrze"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "vodni_nadrze"
+      STYLE
+        COLOR        102 178 255
+        OUTLINECOLOR 0 128 255
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'zaplava_5'
+    METADATA
+      "wms_title"           	"Záplavové území pětileté vody DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/zaplava_5.sld"
+
+      "wfs_title"         	"Záplavové území pětileté vody DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.zaplava_5"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "zaplava_5"
+      STYLE
+        COLOR        0 76 153
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'zaplava_20'
+    METADATA
+      "wms_title"           	"Záplavové území dvacetileté vody DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/zaplava_20.sld"
+
+      "wfs_title"         	"Záplavové území dvacetileté vody DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.zaplava_20"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "zaplava_20"
+      STYLE
+        COLOR        0 102 204
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'zaplava_100'
+    METADATA
+      "wms_title"           	"Záplavové území stoleté vody DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/zaplava_100.sld"
+
+      "wfs_title"         	"Záplavové území stoleté vody DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.zaplava_100"
+    STATUS          OFF
+    TYPE            POLYGON
+    COMPOSITE
+      OPACITY 70
+    END
+    CLASS
+      NAME          "zaplava_100"
+      STYLE
+        COLOR        0 128 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+  LAYER
+    NAME          		'zaplava_max'
+    METADATA
+      "wms_title"           	"Maximální záplavové území DIBAVOD ČR"
+      #"wms_onlineresource"  	"/opt/mapserver/test1.map&"
+      "wms_srs"             	"epsg:5514"
+      #"wms_sld_url"        	"http://localhost/zaplava_max.sld"
+
+      "wfs_title"         	"Maximální záplavové území DIBAVOD ČR"
+      "wfs_srs"           	"EPSG:5514"
+      "gml_include_items" 	"all"
+      "gml_featureid"     	"gid"
+      "wfs_enable_request" 	"*"
+    END
+    CONNECTIONTYPE postgis
+    CONNECTION     "user=gmuser password=gmuzpd dbname=gismentors host=geo102.fsv.cvut.cz port=5432"
+    DATA           "geom FROM dibavod.zaplava_max"
+    STATUS          OFF
+    TYPE            POLYGON
+    CLASS
+      NAME          "zaplava_max"
+      STYLE
+        COLOR        153 204 255
+        OUTLINECOLOR 64 64 64
+      END
+    END
+  END
+
+END #end of map
