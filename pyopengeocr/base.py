@@ -23,8 +23,13 @@ class OpenGeoCRReader:
             shutil.rmtree(self.data_dir)
 
     def _filter(self, input_file):
+        data = []
         with codecs.open(input_file, encoding='utf-8') as f:
-            data = [line.strip() for line in f]
+            for line in f:
+                line = line.strip()
+                if line.startswith('#'):
+                    continue
+                data.append(line)
 
         return data
 
