@@ -33,6 +33,22 @@ class OpenGeoCRReader:
 
         return data
 
+    def _create_schema(self):
+        import psycopg2
+        try:
+            print 'x', self._connstr.lstrip('PG:')
+            conn = psycopg2.connect(self._connstr.lstrip('PG:'))
+        except:
+            raise OpenGeoCRError("Unabe to connect DB")
+
+        cur = conn.cursor()
+        cur.execute("""DROP SCHEMA  IF EXISTS {} CASCADE""".format(self.schema))
+        cur.execute("""CREATE SCHEMA {}""".format(self.schema))
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
     def download(self):
         pass
 

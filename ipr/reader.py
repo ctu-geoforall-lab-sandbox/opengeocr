@@ -5,8 +5,8 @@ import argparse
 pydir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
 
 sys.path.insert(0, os.path.join(pydir, '..'))
-
 from pyopengeocr.base import OpenGeoCRReader
+sys.path.insert(0, os.path.join(pydir, 'iprdownloader'))
 from IprPg import IprDownloaderPg
 
 class IprReader(OpenGeoCRReader):
@@ -15,6 +15,16 @@ class IprReader(OpenGeoCRReader):
                  schema='ipr',
                  input_file=os.path.join(pydir, 'input.txt')):
         OpenGeoCRReader.__init__(self, schema, input_file)
+
+        # TODO: must be solved in base class!
+        self._connstr = "PG:dbname={}".format(dbname)
+        if host:
+            self._connstr += " host={}".format(host)
+        if user:
+            self._connstr += " user={}".format(user)
+        if passwd:
+            self._connstr += " password={}".format(passwd)
+
         self._reader = IprDownloaderPg(dbname, host,
                                        dbuser=user, dbpasswd=passwd,
                                        dbschema=schema)
@@ -25,6 +35,9 @@ class IprReader(OpenGeoCRReader):
         self._reader.download(outdir=self.data_dir, only_import=False)
 
     def importpg(self):
+        # re-create schema from scratch
+        self._create_schema()
+
         self._reader.import_data(crs='S-JTSK', overwrite=True)
 
 def main():
