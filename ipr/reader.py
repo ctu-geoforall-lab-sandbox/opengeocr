@@ -22,16 +22,20 @@ class IprReader(OpenGeoCRReader):
         self._reader = IprDownloaderPg(dbname, host,
                                        dbuser=user, dbpasswd=passwd,
                                        dbschema=schema)
-        for item in self.input_list:
-            self._reader.filter(item, crs='S-JTSK', file_format='shp')
 
     def download(self):
-        self._reader.download(outdir=self.data_dir, only_import=False)
+        self.files = []
+        for item in self.input_list:
+            self._reader.filter(item, crs='S-JTSK', file_format='shp')
+            self._reader.download(outdir=self.data_dir, only_import=False)
+            self.files += self._reader.filename
 
     def importpg(self):
         # re-create schema
         super(IprReader, self).importpg()
 
+        # TODO: fix this workaround!
+        self._reader.filename = self.files
         self._reader.import_data(crs='S-JTSK', overwrite=True)
 
 def main():
