@@ -14,16 +14,10 @@ class IprReader(OpenGeoCRReader):
     def __init__(self, dbname, host, user, passwd,
                  schema='ipr',
                  input_file=os.path.join(pydir, 'input.txt')):
-        OpenGeoCRReader.__init__(self, schema, input_file)
-
-        # TODO: must be solved in base class!
-        self._connstr = "PG:dbname={}".format(dbname)
-        if host:
-            self._connstr += " host={}".format(host)
-        if user:
-            self._connstr += " user={}".format(user)
-        if passwd:
-            self._connstr += " password={}".format(passwd)
+        super(IprReader, self).__init__(
+            dbname, host, user, passwd, schema,
+            input_file
+        )
 
         self._reader = IprDownloaderPg(dbname, host,
                                        dbuser=user, dbpasswd=passwd,
@@ -35,8 +29,8 @@ class IprReader(OpenGeoCRReader):
         self._reader.download(outdir=self.data_dir, only_import=False)
 
     def importpg(self):
-        # re-create schema from scratch
-        self._create_schema()
+        # re-create schema
+        super(IprReader, self).importpg()
 
         self._reader.import_data(crs='S-JTSK', overwrite=True)
 

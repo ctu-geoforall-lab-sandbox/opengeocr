@@ -2,10 +2,21 @@ import os
 import shutil
 import tempfile
 import codecs
-
-class OpenGeoCRReader:
-    def __init__(self, schema, input_file, data_dir=None):
+import psycopg2
+        
+class OpenGeoCRReader(object):
+    def __init__(self, dbname, host, user, passwd, schema,
+                 input_file, data_dir=None):
         self.schema = schema
+        self.geometry_name = 'geom'
+        self._connstr = "PG:dbname={}".format(dbname)
+        if host:
+            self._connstr += " host={}".format(host)
+        if user:
+            self._connstr += " user={}".format(user)
+        if passwd:
+            self._connstr += " password={}".format(passwd)
+        
         self.input_list = self._filter(input_file)
 
         if data_dir:
@@ -34,9 +45,7 @@ class OpenGeoCRReader:
         return data
 
     def _create_schema(self):
-        import psycopg2
         try:
-            print 'x', self._connstr.lstrip('PG:')
             conn = psycopg2.connect(self._connstr.lstrip('PG:'))
         except:
             raise OpenGeoCRError("Unabe to connect DB")
@@ -53,4 +62,4 @@ class OpenGeoCRReader:
         pass
 
     def importpg(self):
-        pass
+        self._create_schema()

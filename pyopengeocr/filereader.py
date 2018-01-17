@@ -12,17 +12,12 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
     def __init__(self, dbname, host, user, passwd, schema,
                  input_file,
                  data_dir=None, force_srs=5514, extension='shp'):
-        OpenGeoCRReader.__init__(self, schema, input_file, data_dir=data_dir)
         self.force_srs = force_srs
-        self.geometry_name = 'geom'
         self.extension = extension
-        self._connstr = "PG:dbname={}".format(dbname)
-        if host:
-            self._connstr += " host={}".format(host)
-        if user:
-            self._connstr += " user={}".format(user)
-        if passwd:
-            self._connstr += " password={}".format(passwd)
+        super(OpenGeoCRFileReader, self).__init__(
+            dbname, host, user, passwd, schema,
+            input_file, data_dir=data_dir
+        )
 
     def _download(self, url):
         print("Downloading {}...".format(url))
@@ -31,9 +26,9 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         z.extractall()
 
     def importpg(self):
-        # re-create schema from scratch
-        self._create_schema()
-
+        # re-create schema
+        super(OpenGeoCRFileReader, self).importpg()
+        
         ods = ogr.Open(self._connstr)
         if ods is None:
             raise OpenGeoCRError("Unable to open '{}'".format(self._connstr))
