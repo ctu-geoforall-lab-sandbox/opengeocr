@@ -1,4 +1,6 @@
-1413
+# A03 - vodní tok (hrubé úseky)
+1414
+# A04 - meliorační kanály
 1415
 1416
 1417

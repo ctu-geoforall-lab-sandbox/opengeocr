@@ -30,7 +30,25 @@ class OpenGeoCRFileReader(OpenGeoCRReader):
         z = zipfile.ZipFile(StringIO.StringIO(r.content))
         z.extractall()
 
+    def _create_schema(self):
+        import psycopg2
+        try:
+            conn = psycopg2.connect(self._connstr.lstrip('PG:'))
+        except:
+            raise OpenGeoCRError("Unabe to connect DB")
+
+        cur = conn.cursor()
+        cur.execute("""DROP SCHEMA  IF EXISTS {} CASCADE""".format(self.schema))
+        cur.execute("""CREATE SCHEMA {}""".format(self.schema))
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
     def importpg(self):
+        # re-create schema from scratch
+        self._create_schema()
+
         ods = ogr.Open(self._connstr)
         if ods is None:
             raise OpenGeoCRError("Unable to open '{}'".format(self._connstr))
